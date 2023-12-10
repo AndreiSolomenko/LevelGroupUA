@@ -83,7 +83,17 @@ public class ObjectsController {
         singleObject.setSalesAgentEmail(oneLGObject.getSalesAgentEmail());
         singleObject.setLatitude(oneLGObject.getLatitude());
         singleObject.setLongitude(oneLGObject.getLongitude());
-        singleObject.setBathroomUnit(oneLGObject.getBathroomUnit());
+
+        String bathroom = "to be confirmed";
+        if (oneLGObject.getBathroomUnit().equals("раздельный + совмещенный")) {
+            bathroom = "роздільний + суміщений";
+        } else if (oneLGObject.getBathroomUnit().equals("совмещенный")) {
+            bathroom = "суміщений";
+        } else if (oneLGObject.getBathroomUnit().equals("раздельный")) {
+            bathroom = "роздільний";
+        }
+
+        singleObject.setBathroomUnit(bathroom);
         singleObject.setId(oneRiaLGObject.getLocalRealtyId());
         List<String> riaImages = oneRiaLGObject.getLoc();
         singleObject.setImages(new ArrayList<>(riaImages));
