@@ -174,7 +174,7 @@ public class CommandLineAppStartupRunner implements CommandLineRunner {
                     riaLGObject.setRoomsCount(getTextValueForRia(characteristicsElement, "rooms_count"));
 
                     String totalAreaText = getTextValueForRia(characteristicsElement, "total_area");
-                    Double totalArea = null;
+                    Double totalArea = 0.0;
                     try {
                         totalArea = Double.parseDouble(totalAreaText);
                     } catch (NumberFormatException e) {
@@ -183,7 +183,7 @@ public class CommandLineAppStartupRunner implements CommandLineRunner {
                     riaLGObject.setTotalArea(totalArea);
 
                     String kitchenAreaText = getTextValueForRia(characteristicsElement, "kitchen_area");
-                    Double kitchenArea = null;
+                    Double kitchenArea = 0.0;
                     try {
                         kitchenArea = Double.parseDouble(kitchenAreaText);
                     } catch (NumberFormatException e) {
@@ -197,7 +197,7 @@ public class CommandLineAppStartupRunner implements CommandLineRunner {
                     riaLGObject.setFloors(getTextValueForRia(characteristicsElement, "floors"));
 
                     String priceText = getTextValueForRia(characteristicsElement, "price");
-                    Double price = null;
+                    Double price = 0.0;
                     try {
                         price = Double.parseDouble(priceText);
                     } catch (NumberFormatException e) {
