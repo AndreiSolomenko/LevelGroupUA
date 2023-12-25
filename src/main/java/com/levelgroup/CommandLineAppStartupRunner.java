@@ -172,13 +172,39 @@ public class CommandLineAppStartupRunner implements CommandLineRunner {
                     riaLGObject.setBuildingNumber(getTextValueForRia(realtyElement, "building_number"));
                     riaLGObject.setNewBuildingName(getTextValueForRia(realtyElement, "newbuilding_name"));
                     riaLGObject.setRoomsCount(getTextValueForRia(characteristicsElement, "rooms_count"));
-                    riaLGObject.setTotalArea(getTextValueForRia(characteristicsElement, "total_area"));
-                    riaLGObject.setKitchenArea(getTextValueForRia(characteristicsElement, "kitchen_area"));
+
+                    String totalAreaText = getTextValueForRia(characteristicsElement, "total_area");
+                    Double totalArea = null;
+                    try {
+                        totalArea = Double.parseDouble(totalAreaText);
+                    } catch (NumberFormatException e) {
+                        e.printStackTrace();
+                    }
+                    riaLGObject.setTotalArea(totalArea);
+
+                    String kitchenAreaText = getTextValueForRia(characteristicsElement, "kitchen_area");
+                    Double kitchenArea = null;
+                    try {
+                        kitchenArea = Double.parseDouble(kitchenAreaText);
+                    } catch (NumberFormatException e) {
+                        e.printStackTrace();
+                    }
+                    riaLGObject.setKitchenArea(kitchenArea);
+
                     riaLGObject.setPlotArea(getTextValueForRia(characteristicsElement, "plot_area"));
                     riaLGObject.setPlotAreaUnit(getTextValueForRia(characteristicsElement, "plot_area_unit"));
                     riaLGObject.setFloor(getTextValueForRia(characteristicsElement, "floor"));
                     riaLGObject.setFloors(getTextValueForRia(characteristicsElement, "floors"));
-                    riaLGObject.setPrice(getTextValueForRia(characteristicsElement, "price"));
+
+                    String priceText = getTextValueForRia(characteristicsElement, "price");
+                    Double price = null;
+                    try {
+                        price = Double.parseDouble(priceText);
+                    } catch (NumberFormatException e) {
+                        e.printStackTrace();
+                    }
+                    riaLGObject.setPrice(price);
+
                     riaLGObject.setCurrency(getTextValueForRia(characteristicsElement, "currency"));
                     riaLGObject.setOfferType(getTextValueForRia(characteristicsElement, "offer_type"));
                     riaLGObject.setDescription(getTextValueForRia(realtyElement, "description"));

@@ -28,6 +28,24 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
+
+
+
+
+
+
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.boot</groupId>-->
+<!--            <artifactId>spring-boot-starter-security</artifactId>-->
+<!--        </dependency>-->
+
+
+
+
+
+
+
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -39,17 +57,24 @@
             <artifactId>spring-boot-starter-mail</artifactId>
         </dependency>
 
+
+
+<!--        DB-->
+
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
             <scope>runtime</scope>
         </dependency>
 
-        <!--        <dependency>-->
-        <!--            <groupId>mysql</groupId>-->
-        <!--            <artifactId>mysql-connector-java</artifactId>-->
-        <!--            <version>8.0.21</version>-->
-        <!--        </dependency>-->
+<!--                <dependency>-->
+<!--                    <groupId>mysql</groupId>-->
+<!--                    <artifactId>mysql-connector-java</artifactId>-->
+<!--                    <version>8.0.21</version>-->
+<!--                </dependency>-->
+
+
+
 
         <dependency>
             <groupId>org.hibernate</groupId>
@@ -81,6 +106,7 @@
         </dependency>
     </dependencies>
 
+
     <build>
         <plugins>
             <plugin>
@@ -91,83 +117,83 @@
     </build>
 
 
-<!--        <build>-->
-<!--            <plugins>-->
+<!--    <build>-->
+<!--        <plugins>-->
 
-<!--                <plugin>-->
-<!--                    <groupId>org.springframework.boot</groupId>-->
-<!--                    <artifactId>spring-boot-maven-plugin</artifactId>-->
-<!--                </plugin>-->
+<!--            <plugin>-->
+<!--                <groupId>org.springframework.boot</groupId>-->
+<!--                <artifactId>spring-boot-maven-plugin</artifactId>-->
+<!--            </plugin>-->
 
-<!--                <plugin>-->
-<!--                    <groupId>com.github.eirslett</groupId>-->
-<!--                    <artifactId>frontend-maven-plugin</artifactId>-->
-<!--                    <version>1.14.2</version>-->
+<!--            <plugin>-->
+<!--                <groupId>com.github.eirslett</groupId>-->
+<!--                <artifactId>frontend-maven-plugin</artifactId>-->
+<!--                <version>1.14.2</version>-->
 
-<!--                    <executions>-->
-<!--                        <execution>-->
-<!--                            <id>Install node and npm</id>-->
-<!--                            <goals>-->
-<!--                                <goal>install-node-and-npm</goal>-->
-<!--                            </goals>-->
-<!--                            <phase>generate-resources</phase>-->
-<!--                            <configuration>-->
-<!--                                <nodeVersion>v20.6.1</nodeVersion>-->
-<!--                                <npmVersion>9.8.1</npmVersion>-->
-<!--                            </configuration>-->
-<!--                        </execution>-->
-<!--                        <execution>-->
-<!--                            <id>npm install</id>-->
-<!--                            <goals>-->
-<!--                                <goal>npm</goal>-->
-<!--                            </goals>-->
-<!--                            <phase>generate-resources</phase>-->
-<!--                            <configuration>-->
-<!--                                <arguments>install</arguments>-->
-<!--                            </configuration>-->
-<!--                        </execution>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <id>Install node and npm</id>-->
+<!--                        <goals>-->
+<!--                            <goal>install-node-and-npm</goal>-->
+<!--                        </goals>-->
+<!--                        <phase>generate-resources</phase>-->
+<!--                        <configuration>-->
+<!--                            <nodeVersion>v20.6.1</nodeVersion>-->
+<!--                            <npmVersion>9.8.1</npmVersion>-->
+<!--                        </configuration>-->
+<!--                    </execution>-->
+<!--                    <execution>-->
+<!--                        <id>npm install</id>-->
+<!--                        <goals>-->
+<!--                            <goal>npm</goal>-->
+<!--                        </goals>-->
+<!--                        <phase>generate-resources</phase>-->
+<!--                        <configuration>-->
+<!--                            <arguments>install</arguments>-->
+<!--                        </configuration>-->
+<!--                    </execution>-->
 
-<!--                        <execution>-->
-<!--                            <id>npm build</id>-->
-<!--                            <goals>-->
-<!--                                <goal>npm</goal>-->
-<!--                            </goals>-->
-<!--                            <phase>generate-resources</phase>-->
-<!--                            <configuration>-->
-<!--                                <arguments>run build</arguments>-->
-<!--                            </configuration>-->
-<!--                        </execution>-->
-<!--                    </executions>-->
-<!--                    <configuration>-->
-<!--                        <nodeVersion>v20.6.1</nodeVersion>-->
-<!--                        <workingDirectory>src/main/frontend</workingDirectory>-->
-<!--                    </configuration>-->
-<!--                </plugin>-->
+<!--                    <execution>-->
+<!--                        <id>npm build</id>-->
+<!--                        <goals>-->
+<!--                            <goal>npm</goal>-->
+<!--                        </goals>-->
+<!--                        <phase>generate-resources</phase>-->
+<!--                        <configuration>-->
+<!--                            <arguments>run build</arguments>-->
+<!--                        </configuration>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--                <configuration>-->
+<!--                    <nodeVersion>v20.6.1</nodeVersion>-->
+<!--                    <workingDirectory>src/main/frontend</workingDirectory>-->
+<!--                </configuration>-->
+<!--            </plugin>-->
 
-<!--                <plugin>-->
-<!--                    <groupId>org.apache.maven.plugins</groupId>-->
-<!--                    <artifactId>maven-resources-plugin</artifactId>-->
-<!--                    <executions>-->
-<!--                        <execution>-->
-<!--                            <id>Copy JavaScript app into SpringBoot</id>-->
-<!--                            <phase>process-resources</phase>-->
-<!--                            <goals>-->
-<!--                                <goal>copy-resources</goal>-->
-<!--                            </goals>-->
-<!--                            <configuration>-->
-<!--                                <outputDirectory>target/classes/static</outputDirectory>-->
-<!--                                <resources>-->
-<!--                                    <resource>-->
-<!--                                        <directory>src/main/frontend/build</directory>-->
-<!--                                        <filtering>true</filtering>-->
-<!--                                    </resource>-->
-<!--                                </resources>-->
-<!--                            </configuration>-->
-<!--                        </execution>-->
-<!--                    </executions>-->
-<!--                </plugin>-->
+<!--            <plugin>-->
+<!--                <groupId>org.apache.maven.plugins</groupId>-->
+<!--                <artifactId>maven-resources-plugin</artifactId>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <id>Copy JavaScript app into SpringBoot</id>-->
+<!--                        <phase>process-resources</phase>-->
+<!--                        <goals>-->
+<!--                            <goal>copy-resources</goal>-->
+<!--                        </goals>-->
+<!--                        <configuration>-->
+<!--                            <outputDirectory>target/classes/static</outputDirectory>-->
+<!--                            <resources>-->
+<!--                                <resource>-->
+<!--                                    <directory>src/main/frontend/build</directory>-->
+<!--                                    <filtering>true</filtering>-->
+<!--                                </resource>-->
+<!--                            </resources>-->
+<!--                        </configuration>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--            </plugin>-->
 
-<!--            </plugins>-->
-<!--        </build>-->
+<!--        </plugins>-->
+<!--    </build>-->
 
 </project>

@@ -7,6 +7,8 @@ import com.levelgroup.model.LGObject;
 import com.levelgroup.model.RiaLGObject;
 import com.levelgroup.services.LGObjectService;
 import com.levelgroup.services.RiaLGObjectService;
+import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
@@ -20,10 +22,15 @@ import com.google.gson.JsonArray;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
-//@CrossOrigin(origins = "http://localhost:3000")
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+
 @RestController
 @RequestMapping("/api")
 public class ObjectsController {
+
+    static final int ITEMS_PER_PAGE = 12;
 
     @Autowired
     private JavaMailSender emailSender;
@@ -57,7 +64,7 @@ public class ObjectsController {
     public ResponseEntity<String> submitForm(@RequestBody FormData formData) {
         try {
             SimpleMailMessage message = new SimpleMailMessage();
-            message.setTo("andrsolo10@gmail.com");
+            message.setTo("andrsolo10@ukr.net");
             message.setSubject("Form Submission");
             message.setText("Name: " + formData.getName() +
                     "\nPhone: " + formData.getPhone() +
@@ -109,7 +116,7 @@ public class ObjectsController {
         singleObject.setOfferType(oneRiaLGObject.getOfferType());
         singleObject.setDescription(oneRiaLGObject.getDescription());
         singleObject.setCurrency(oneRiaLGObject.getCurrency());
-        singleObject.setPrice(oneRiaLGObject.getPrice().trim());
+        singleObject.setPrice(oneRiaLGObject.getPrice());
 
         String json = "";
 
@@ -139,12 +146,14 @@ public class ObjectsController {
             @RequestParam(required = false) String fromKitchenArea,
             @RequestParam(required = false) String toKitchenArea,
             @RequestParam(required = false) String offerType,
-            @RequestParam(required = false) String street
+            @RequestParam(required = false) String street,
+            @RequestParam(required = false, defaultValue = "0") Integer page
     ) {
+
+        if (page < 0) page = 0;
+
         String typeInXML = "";
         List<String> categoryInXML = new ArrayList<>();
-
-        List<String> temp = new ArrayList<>();
 
         if (type.equals("buy")) {
             typeInXML = "продаж";
@@ -169,116 +178,78 @@ public class ObjectsController {
             categoryInXML.add("приміщення вільного призначення");
         }
 
-        List<RiaLGObject> allObjects = riaLGObjectService.get();
+        Pageable pageable = PageRequest.of(page, ITEMS_PER_PAGE, Sort.by(Sort.Direction.ASC, "currency").and(Sort.by(Sort.Direction.DESC, "price")));
 
+        Page<RiaLGObject> objectsPage = riaLGObjectService.getObjectsByFilters(
+                typeInXML, categoryInXML,
+                (!district.isEmpty() ? Arrays.asList(district.split("\\s*,\\s*")) : null),
+                (!newBuildingName.isEmpty() ? Arrays.asList(newBuildingName.split("\\s*,\\s*")) : null),
+                (isNumeric(fromArea) ? Double.parseDouble(fromArea) : 0.0),
+                (isNumeric(toArea) ? Double.parseDouble(toArea) : Double.MAX_VALUE),
+                (isNumeric(fromPrice) ? Double.parseDouble(fromPrice) : 0.0),
+                (isNumeric(toPrice) ? Double.parseDouble(toPrice) : Double.MAX_VALUE),
+                (!rooms.isEmpty() ? Arrays.asList(rooms.split("\\s*,\\s*")) : null),
+                street,
+                (!metro.isEmpty() ? Arrays.asList(metro.split("\\s*,\\s*")) : null),
+                (!floor.isEmpty() ? Arrays.asList(floor.split("\\s*,\\s*")) : null),
+                (isNumeric(fromKitchenArea) ? Double.parseDouble(fromKitchenArea) : 0.0),
+                (isNumeric(toKitchenArea) ? Double.parseDouble(toKitchenArea) : Double.MAX_VALUE),
+                offerType, pageable);
+
+        List<RiaLGObject> allObjects = objectsPage.getContent();
+
+        List<String> temp = new ArrayList<>();
         for (RiaLGObject riaLGObject : allObjects) {
-            if (riaLGObject.getAdvertType().equals(typeInXML) && categoryInXML.contains(riaLGObject.getRealtyType())) {
-                boolean passesFilters = true;
-
-                if (district != null && !district.isEmpty()) {
-                    List<String> districtList = Arrays.asList(district.split("\\s*,\\s*"));
-                    if (!"to be confirmed".equals(riaLGObject.getDistrict())) {
-                        if (!districtList.contains(riaLGObject.getDistrict().trim())) {
-                            passesFilters = false;
-                        }
-                    } else if (!districtList.contains("to be confirmed")){
-                        passesFilters = false;
-                    }
-                }
-
-                if (newBuildingName != null && !newBuildingName.isEmpty()) {
-                    List<String> newBuildingNameList = Arrays.asList(newBuildingName.split("\\s*,\\s*"));
-                    if (!"to be confirmed".equals(riaLGObject.getNewBuildingName())) {
-                        if (!newBuildingName.contains(riaLGObject.getNewBuildingName().trim())) {
-                            passesFilters = false;
-                        }
-                    } else if (!newBuildingNameList.contains("to be confirmed")){
-                        passesFilters = false;
-                    }
-                }
-
-                if (rooms != null && !rooms.isEmpty()) {
-                    List<String> roomsList = Arrays.asList(rooms.split("\\s*,\\s*"));
-                    if (!roomsList.contains(riaLGObject.getRoomsCount().trim())) {
-                        passesFilters = false;
-                    }
-                }
-
-                if (metro != null && !metro.isEmpty()) {
-                    List<String> metroList = Arrays.asList(metro.split("\\s*,\\s*"));
-                    if (!"to be confirmed".equals(riaLGObject.getMetro())) {
-                        if (!metro.contains(riaLGObject.getMetro().trim())) {
-                            passesFilters = false;
-                        }
-                    } else if (!metroList.contains("to be confirmed")){
-                        passesFilters = false;
-                    }
-                }
-
-                if (floor != null && !floor.isEmpty()) {
-                    List<String> floorList = Arrays.asList(floor.split("\\s*,\\s*"));
-                    if (!floorList.contains(riaLGObject.getFloor().trim())) {
-                        passesFilters = false;
-                    }
-                }
-
-                if ((isNumeric(fromArea) || isNumeric(toArea)) && isNumeric(riaLGObject.getTotalArea())) {
-                    double areaValue = Double.parseDouble(riaLGObject.getTotalArea());
-                    double fromAreaValue = isNumeric(fromArea) ? Double.parseDouble(fromArea) : 0.0;
-                    double toAreaValue = isNumeric(toArea) ? Double.parseDouble(toArea) : Double.MAX_VALUE;
-
-                    if (areaValue < fromAreaValue || areaValue > toAreaValue) {
-                        passesFilters = false;
-                    }
-                }
-
-                if ((isNumeric(fromPrice) || isNumeric(toPrice)) && isNumeric(riaLGObject.getPrice())) {
-                    double priceValue = Double.parseDouble(riaLGObject.getPrice());
-                    double fromPriceValue = isNumeric(fromPrice) ? Double.parseDouble(fromPrice) : 0.0;
-                    double toPriceValue = isNumeric(toPrice) ? Double.parseDouble(toPrice) : Double.MAX_VALUE;
-
-                    if (priceValue < fromPriceValue || priceValue > toPriceValue) {
-                        passesFilters = false;
-                    }
-                }
-
-                if ((isNumeric(fromKitchenArea) || isNumeric(toKitchenArea)) && isNumeric(riaLGObject.getKitchenArea())) {
-                    double kitchenAreaValue = Double.parseDouble(riaLGObject.getKitchenArea());
-                    double fromKitchenAreaValue = isNumeric(fromKitchenArea) ? Double.parseDouble(fromKitchenArea) : 0.0;
-                    double toKitchenAreaValue = isNumeric(toKitchenArea) ? Double.parseDouble(toKitchenArea) : Double.MAX_VALUE;
-
-                    if (kitchenAreaValue < fromKitchenAreaValue || kitchenAreaValue > toKitchenAreaValue) {
-                        passesFilters = false;
-                    }
-                }
-
-                if (offerType != null && !offerType.isEmpty()) {
-                    if (!offerType.contains(riaLGObject.getOfferType().trim())) {
-                        passesFilters = false;
-                    }
-                }
-
-                if (street != null && !street.isEmpty()) {
-                    if (!street.contains(riaLGObject.getStreet().trim().toLowerCase())) {
-                        passesFilters = false;
-                    }
-                }
-
-                if (passesFilters) {
-                    temp.add(makeJson(riaLGObject));
-                }
-            }
+                temp.add(makeJson(riaLGObject));
         }
 
         Gson gson = new Gson();
         JsonArray jsonArray = new JsonArray();
-        for (
-                String jsonString : temp) {
+        for (String jsonString : temp) {
             jsonArray.add(gson.fromJson(jsonString, JsonObject.class));
         }
-
         String data = jsonArray.toString();
-        return ResponseEntity.ok(data);
+
+
+        long pageCount = objectsPage.getTotalPages();
+
+
+        List<RiaLGObject> objectsForFilters = riaLGObjectService.getDataForFilters(
+                typeInXML, categoryInXML,
+                (!district.isEmpty() ? Arrays.asList(district.split("\\s*,\\s*")) : null),
+                (!newBuildingName.isEmpty() ? Arrays.asList(newBuildingName.split("\\s*,\\s*")) : null),
+                (isNumeric(fromArea) ? Double.parseDouble(fromArea) : 0.0),
+                (isNumeric(toArea) ? Double.parseDouble(toArea) : Double.MAX_VALUE),
+                (isNumeric(fromPrice) ? Double.parseDouble(fromPrice) : 0.0),
+                (isNumeric(toPrice) ? Double.parseDouble(toPrice) : Double.MAX_VALUE),
+                (!rooms.isEmpty() ? Arrays.asList(rooms.split("\\s*,\\s*")) : null),
+                street,
+                (!metro.isEmpty() ? Arrays.asList(metro.split("\\s*,\\s*")) : null),
+                (!floor.isEmpty() ? Arrays.asList(floor.split("\\s*,\\s*")) : null),
+                (isNumeric(fromKitchenArea) ? Double.parseDouble(fromKitchenArea) : 0.0),
+                (isNumeric(toKitchenArea) ? Double.parseDouble(toKitchenArea) : Double.MAX_VALUE),
+                offerType);
+
+        List<String> tempDataForFilters = new ArrayList<>();
+
+        for (RiaLGObject riaLGObject : objectsForFilters) {
+            tempDataForFilters.add(makeJsonForFilters(riaLGObject));
+        }
+
+        Gson gsonForFilters = new Gson();
+        JsonArray jsonArrayForFilters  = new JsonArray();
+        for (String jsonString : tempDataForFilters) {
+            jsonArrayForFilters.add(gsonForFilters .fromJson(jsonString, JsonObject.class));
+        }
+
+        String dataForFilters = jsonArrayForFilters.toString();
+
+        Map<String, Object> responseMap = new HashMap<>();
+        responseMap.put("totalPages", pageCount);
+        responseMap.put("data", data);
+        responseMap.put("dataForFilters", dataForFilters);
+
+        return ResponseEntity.ok(responseMap);
 
     }
 
@@ -347,11 +318,29 @@ public class ObjectsController {
         List<String> names = new ArrayList<>();
 
         List<LGObject> allObjects = objectService.get();
+        List<RiaLGObject> riaLGObjects = riaLGObjectService.get();
+
         for (LGObject lgObject : allObjects) {
             if (!names.contains(lgObject.getSalesAgentName())) {
                 names.add(lgObject.getSalesAgentName());
             }
         }
+        names.add("_________________________________");
+
+        for (RiaLGObject riaLGObject : riaLGObjects) {
+            if (!names.contains(riaLGObject.getDistrict())) {
+                names.add(riaLGObject.getDistrict());
+            }
+        }
+
+        names.add("_________________________________");
+
+        for (RiaLGObject riaLGObject : riaLGObjects) {
+            if (!names.contains(riaLGObject.getRoomsCount())) {
+                names.add(riaLGObject.getRoomsCount());
+            }
+        }
+
         return names;
     }
 
@@ -369,8 +358,8 @@ public class ObjectsController {
                 "\"buildingNumber\": \"" + riaLGObject.getBuildingNumber() + "\",\n" +
                 "\"district\": \"" + riaLGObject.getDistrict() + "\",\n" +
                 "\"metro\": \"" + riaLGObject.getMetro() + "\",\n" +
-                "\"totalArea\": \"" + riaLGObject.getTotalArea().trim() + "\",\n" +
-                "\"kitchenArea\": \"" + riaLGObject.getKitchenArea().trim() + "\",\n" +
+                "\"totalArea\": \"" + riaLGObject.getTotalArea() + "\",\n" +
+                "\"kitchenArea\": \"" + riaLGObject.getKitchenArea() + "\",\n" +
                 "\"plotArea\": \"" + riaLGObject.getPlotArea().trim() + "\",\n" +
                 "\"rooms\": \"" + riaLGObject.getRoomsCount() + "\",\n" +
                 "\"floor\": \"" + riaLGObject.getFloor().trim() + "\",\n" +
@@ -378,7 +367,19 @@ public class ObjectsController {
                 "\"offerType\": \"" + riaLGObject.getOfferType().trim() + "\",\n" +
                 "\"newBuildingName\": \"" + riaLGObject.getNewBuildingName() + "\",\n" +
                 "\"currency\": \"" + riaLGObject.getCurrency() + "\",\n" +
-                "\"price\": \"" + riaLGObject.getPrice().trim() + "\"\n" +
+                "\"price\": \"" + riaLGObject.getPrice() + "\"\n" +
+                "}";
+    }
+
+    private static String makeJsonForFilters(RiaLGObject riaLGObject) {
+        return "{\n" +
+                "\"street\": \"" + riaLGObject.getStreet() + "\",\n" +
+                "\"district\": \"" + riaLGObject.getDistrict() + "\",\n" +
+                "\"metro\": \"" + riaLGObject.getMetro() + "\",\n" +
+                "\"rooms\": \"" + riaLGObject.getRoomsCount() + "\",\n" +
+                "\"floor\": \"" + riaLGObject.getFloor().trim() + "\",\n" +
+                "\"offerType\": \"" + riaLGObject.getOfferType().trim() + "\",\n" +
+                "\"newBuildingName\": \"" + riaLGObject.getNewBuildingName() + "\"\n" +
                 "}";
     }
 

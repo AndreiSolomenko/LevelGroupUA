@@ -23,13 +23,13 @@ public class RiaLGObject {
     private String street;
     private String buildingNumber;
     private String roomsCount;
-    private String totalArea;
-    private String kitchenArea;
+    private Double totalArea;
+    private Double kitchenArea;
     private String plotArea;
     private String plotAreaUnit;
     private String floor;
     private String floors;
-    private String price;
+    private Double price;
     private String currency;
     private String offerType;
     private String newBuildingName;

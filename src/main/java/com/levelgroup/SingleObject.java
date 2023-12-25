@@ -20,7 +20,7 @@ public class SingleObject {
     private String buildingNumber;
     private String district;
     private String metro;
-    private String totalArea;
+    private Double totalArea;
     private String plotArea;
     private String rooms;
     private String floor;
@@ -28,5 +28,5 @@ public class SingleObject {
     private String offerType;
     private String description;
     private String currency;
-    private String price;
+    private Double price;
 }
