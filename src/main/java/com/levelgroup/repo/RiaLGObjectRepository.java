@@ -25,7 +25,7 @@ public interface RiaLGObjectRepository extends JpaRepository<RiaLGObject, Long> 
             "AND (o.totalArea between :fromArea and :toArea) " +
             "AND (o.price between :fromPrice and :toPrice) " +
             "AND (:rooms is null or o.roomsCount IN :rooms) " +
-            "AND (COALESCE(:street, '') = '' or o.street = :street) " +
+            "AND (COALESCE(:street, '') = '' or LOWER(o.street) = :street) " +
             "AND (:metro is null or o.metro IN :metro) " +
             "AND (:floor is null or o.floor IN :floor) " +
             "AND (o.kitchenArea between :fromKitchenArea and :toKitchenArea) " +
@@ -57,7 +57,7 @@ public interface RiaLGObjectRepository extends JpaRepository<RiaLGObject, Long> 
             "AND (CAST(o.totalArea as DOUBLE) between :fromArea and :toArea) " +
             "AND (o.price between :fromPrice and :toPrice) " +
             "AND (:rooms is null or o.roomsCount IN :rooms) " +
-            "AND (COALESCE(:street, '') = '' or o.street = :street) " +
+            "AND (COALESCE(:street, '') = '' or LOWER(o.street) = :street) " +
             "AND (:metro is null or o.metro IN :metro) " +
             "AND (:floor is null or o.floor IN :floor) " +
             "AND (CAST(o.kitchenArea as DOUBLE) between :fromKitchenArea and :toKitchenArea) " +
