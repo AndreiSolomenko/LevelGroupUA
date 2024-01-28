@@ -44,23 +44,6 @@ public class ObjectsController {
     }
 
 
-//    In development stage
-
-//    @PostMapping("/send-message")
-//    public ResponseEntity<String> sendMessage(@RequestBody Map<String, String> message) {
-//
-//        return ResponseEntity.ok("Message sent successfully.");
-//    }
-//
-//    @GetMapping("/get-messages")
-//    public ResponseEntity<List<String>> getMessages() {
-//        List<String> messages = new ArrayList<>();
-//        messages.add("Message sent successfully.");
-//
-//        return ResponseEntity.ok(messages);
-//    }
-
-
     @PostMapping("/submit-form")
     public ResponseEntity<String> submitForm(@RequestBody FormData formData) {
         try {
