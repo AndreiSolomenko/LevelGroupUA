@@ -28,6 +28,7 @@ import org.springframework.data.domain.Pageable;
 
 //@CrossOrigin(origins = "http://localhost:3000")
 @RestController
+@RequestMapping("/api")
 public class ObjectsController {
 
     static final int ITEMS_PER_PAGE = 12;

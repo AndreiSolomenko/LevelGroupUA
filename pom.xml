@@ -55,6 +55,7 @@
         </dependency>
 
 
+
 <!--        DB-->
 
         <dependency>
@@ -71,9 +72,22 @@
 
 
 
+
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>6.2.13.Final</version>
+        </dependency>
+
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.mail</groupId>
+            <artifactId>javax.mail-api</artifactId>
+            <version>1.5.0</version>
         </dependency>
 
         <dependency>
