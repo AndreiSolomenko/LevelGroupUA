@@ -2,7 +2,6 @@ package com.levelgroup;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ComponentScan;
 //import org.springframework.context.annotation.Bean;
 //import org.springframework.http.HttpMethod;
 //import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -27,6 +26,8 @@ public class LevelGroupBackendApplication {
 //                    auth.requestMatchers(HttpMethod.GET, "/{type}/{category}").permitAll();
 //                    auth.requestMatchers(HttpMethod.GET, "/{type}/{category}/{id}").permitAll();
 //                    auth.requestMatchers(HttpMethod.POST, "/submit-form").permitAll();
+//                    auth.requestMatchers(HttpMethod.GET, "/send-message").permitAll();
+//                    auth.requestMatchers(HttpMethod.GET, "/get-messages").permitAll();
 //                })
 //                .httpBasic(withDefaults());
 //

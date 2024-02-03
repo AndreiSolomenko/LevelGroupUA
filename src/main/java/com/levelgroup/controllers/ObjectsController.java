@@ -28,7 +28,6 @@ import org.springframework.data.domain.Pageable;
 
 //@CrossOrigin(origins = "http://localhost:3000")
 @RestController
-@RequestMapping("/api")
 public class ObjectsController {
 
     static final int ITEMS_PER_PAGE = 12;
@@ -251,7 +250,7 @@ public class ObjectsController {
             housesList.add("http://120064.ligapro.ua/pic/gallery/sell_house/sd6687/44011_0073dac404fbf578f5efd9f6e35c64d3.jpg");
             housesList.add("http://120064.ligapro.ua/pic/gallery/sell_house/sd6687/a5b07_bce96927f1421da44b94c3756b751f8d.jpg");
             apartmentsList.add("http://120064.ligapro.ua/pic/gallery/sell_app/sd6687/6e663_409d399b54c3d619d66c33e5e8a037f6.jpg");
-            apartmentsList.add("http://120064.ligapro.ua/pic/gallery/sell_app/sd6687/a971f_7c5da2939fe85866c6ed2d947a6002b3.jpg");
+            apartmentsList.add("http://120064.ligapro.ua/pic/gallery/sell_app/sd6687/c19c1_7c5da2939fe85866c6ed2d947a6002b3.jpg");
             apartmentsList.add("http://120064.ligapro.ua/pic/gallery/sell_app/sd6687/86914_196c20eb190d4f876de7efd8b9fd05c6.jpg");
             apartmentsList.add("http://120064.ligapro.ua/pic/gallery/sell_app/sd6687/2367a_6274d3164a2a2847d8acbdd589beec3.webp");
             landList.add("http://120064.ligapro.ua/pic/gallery/sell_zu/sd6687/19ae6_f2685518cd9ade63531403dcb319d190.jpg");
