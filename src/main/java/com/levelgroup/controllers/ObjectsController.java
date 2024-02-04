@@ -1,18 +1,13 @@
 package com.levelgroup.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.levelgroup.FormData;
 import com.levelgroup.SingleObject;
 import com.levelgroup.model.LGObject;
 import com.levelgroup.model.RiaLGObject;
 import com.levelgroup.services.LGObjectService;
 import com.levelgroup.services.RiaLGObjectService;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 
 import java.util.*;
 
@@ -20,7 +15,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -32,33 +26,12 @@ import org.springframework.data.domain.Pageable;
 public class ObjectsController {
 
     static final int ITEMS_PER_PAGE = 12;
-
-    @Autowired
-    private JavaMailSender emailSender;
     private final LGObjectService objectService;
     private final RiaLGObjectService riaLGObjectService;
 
     public ObjectsController(LGObjectService objectService, RiaLGObjectService riaLGObjectService) {
         this.objectService = objectService;
         this.riaLGObjectService = riaLGObjectService;
-    }
-
-
-    @PostMapping("/submit-form")
-    public ResponseEntity<String> submitForm(@RequestBody FormData formData) {
-        try {
-            SimpleMailMessage message = new SimpleMailMessage();
-            message.setTo("andrsolo10@ukr.net");
-            message.setSubject("Form Submission");
-            message.setText("Name: " + formData.getName() +
-                    "\nPhone: " + formData.getPhone() +
-                    "\nEmail: " + formData.getEmail());
-            emailSender.send(message);
-            return ResponseEntity.ok("Email sent successfully!");
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal Server Error: " + e.getMessage());
-        }
     }
 
     @GetMapping("/{type}/{category}/{id}")
